@@ -21,14 +21,12 @@ If an `index.html` file is required but does not exist, any files [globbing](htt
 
 Example: `publi.sh -o -i "000_*.md" ~/markdown ~/public_html`
 
-Here, each file matching `000_*.md` will be renamed `index.html` when converted.
+Here, each file matching `000_*.md` will be renamed `index.html` when converted. It should be noted that this can cause overwrites if multiple files match in a single directory.
 
 ### `-o`
 By default, publi.sh will exit with an error if the chosen output directory is not empty to prevent accidentally overwriting its contents. The user can either remove the contents of the output directory prior to running publi.sh, or use the `-o` flag to acknowledge the overwrite and disable the error.
 
 ### `-p <args>`
-Sometimes it may be useful to specify additional arguments to pandoc, such as `--title-prefix` or `--toc-depth`. This can be done using the `-p` flag, which can be specified multiple times if needed.
+Sometimes it can be useful to specify additional arguments to pandoc. This can be done using the `-p` flag, which can be used multiple times if needed.
 
-Example: `publi.sh -o -p --defaults="~/.pandoc/defaults.yaml" ~/markdown ~/public_html`
-
-Here, `--defaults="~/.pandoc/defaults.yaml"` is being passed to pandoc to specify a package of options rather than listing them all on the command line. See the [pandoc user's guide](https://pandoc.org/MANUAL.html) for more information.
+Example: `publi.sh -o -p --title-prefix="My Website" -p --toc-depth=4 ~/markdown ~/public_html`
