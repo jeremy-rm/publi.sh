@@ -1,41 +1,53 @@
 #!/usr/bin/env bash
 
 PUBLISH='
-publi.sh [PUHB-lish] v3-2020.10.12.00
+publi.sh [PUHB-lish] v3-2020.10.19.05
 (n) 1.	A tool for publishing markdown on the web with pandoc.
 		By J. Mayer (jeremy@0x4A.org) -- Use at your own risk!
 '
 
-# -- Pandoc Options:
-# -- https://pandoc.org/MANUAL.html
-PANDOC+=(--css="/style.css")
-#PANDOC+=(--defaults="")
-PANDOC+=(--from="markdown+emoji+markdown_in_html_blocks+yaml_metadata_block")
-#PANDOC+=(--include-in-header="")
-#PANDOC+=(--include-before-body=""
-#PANDOC+=(--include-after-body="")
-#PANDOC+=(--template="")
-#PANDOC+=(--quiet)
-#PANDOC+=(--resource-path="")
-#PANDOC+=(--self-contained)
-PANDOC+=(--standalone)
-PANDOC+=(--strip-comments)
-#PANDOC+=(--title-prefix="")
-PANDOC+=(--to="html5")
-PANDOC+=(--toc)
-PANDOC+=(--toc-depth=2)
+# -- Changelog
+# 2020.10.13.01 Modified the 'publish_main' loop to reflect the addition of 'shopt globstar'.
+# 2020.10.19.01 The 'publish_init' function will now create a '~/.publi.sh' directory if one does not exist.
+# 2020.10.19.02 The 'publish_init' function will now create default files when creating '~/.publi.sh'.
+# 2020.10.19.03 Created a proof-of-concept template for returning YAML values to stdout, for some possible future use.
+#		Where 'example-variable.template' contains only '$example-variable$'...
+#		And 'example-input.md' contains a YAML header containing 'example-variable: foo'...
+#		Then 'pandoc example-input.md --template=example-variable.template' will return the value of example-variable.
+# 2020.10.19.04 Restructured the pandoc options to separate the dangerous arguments from those which are safe to edit.
+# 2020.10.19.05 Created common strings array to replace repetative messages.
 
-# -- Shell Options:
+# -- Pandoc Options (Safe)
+PANDOC+=(--css="/style.css")
+PANDOC+=(--number-sections)
+PANDOC+=(--quiet)
+PANDOC+=(--section-divs)
+PANDOC+=(--toc)
+
+# -- Pandoc Options (Dangerous)
+PANDOC+=(--from="markdown+backtick_code_blocks+definition_lists+emoji+fancy_lists+fenced_code_attributes+line_blocks+markdown_in_html_blocks+yaml_metadata_block")
+PANDOC+=(--to="html5")
+PANDOC+=(--include-in-header="${HOME}/.publi.sh/include/in-header.html")
+PANDOC+=(--include-before-body="${HOME}/.publi.sh/include/before-body.html")
+PANDOC+=(--include-after-body="${HOME}/.publi.sh/include/after-body.html")
+PANDOC+=(--standalone)
+
+# -- Common Message Array
+declare -A MSG=(
+	[1]="check above this line for more information"
+)
+
+# -- Shell Options
 shopt -s globstar
 
-# -- publish_die <exit status> <args>:
+# -- publish_die <exit status> <args>
 # -- Echo formatted exit status and additional args to console then exit with status.
 publish_die() {
-	echo -e "\n$0 error, status $1: $2\n" >/dev/stderr
+	echo -e "\n$0 error - exit $1: $2\n" >/dev/stderr
 	exit $1
 }
 
-# -- publish_init <input directory> <output directory>:
+# -- publish_init <input directory> <output directory>
 # -- Sanity and safety checks, debugging/verbosity output.
 publish_init() {
 
@@ -47,7 +59,7 @@ publish_init() {
 		publish_debug() {
 			if [[ ! -z $1 ]]
 			then
-				echo "$0:" "[$(date +'%s.%N')]" "$1"
+				echo "$0:" "$1"
 			else
 				echo
 			fi
@@ -78,6 +90,20 @@ publish_init() {
 	do
 		publish_debug "pandoc: $pandocopt"
 	done
+
+	# Sanity: Check that the ~/publi.sh directory exists, otherwise create it.
+	if ! [[ -r "${HOME}/.publi.sh" ]]
+	then
+		publish_debug "creating new script directory: ${HOME}/.publi.sh"
+		# Create include directory and default files.
+		mkdir -p "${HOME}/.publi.sh/include" || publish_die 1 "${MSG[1]}"
+		touch "${HOME}/.publi.sh/include/after-body.html" || publish_die 1 "${MSG[1]}"
+		touch "${HOME}/.publi.sh/include/before-body.html" || publish_die 1 "${MSG[1]}"
+		touch "${HOME}/.publi.sh/include/in-header.html" || publish_die 1 "${MSG[1]}"
+		# Create template directory and default files.
+		mkdir -p "${HOME}/.publi.sh/templates" || publish_die 1 "${MSG[1]}"
+		echo "\$example-variable\$" > "${HOME}/.publi.sh/templates/example-variable.template" || publish_die 1 "${MSG[1]}"
+	fi
 
 	# Sanity: Check for pandoc.
 	if ! command -v pandoc &> /dev/null
@@ -113,7 +139,7 @@ publish_init() {
 
 }
 
-# -- publish_help:
+# -- publish_help
 # -- Echo script usage and options to console.
 publish_help() {
 
@@ -132,12 +158,11 @@ publish_help() {
 
 }
 
-# -- publish_main <input directory> <output directory>:
+# -- publish_main <input directory> <output directory>
 # -- Iterate over the input directory, converting and copying files to the output directory while preserving subdirectory structure.
 publish_main() {
 
 	# Iterate over the contents of $1, recursively.
-#	for input in "$1"/* "$1"/**/*
 	for input in "$1"/**/*
 	do
 
@@ -149,7 +174,7 @@ publish_main() {
 			output="$2${input#$1}"
 
 			# Create any necessary subdirectories, die on error.
-			mkdir -p "$(dirname "${output}")" || publish_die 1 "mkdir exited with status > 0, check console"
+			mkdir -p "$(dirname "${output}")" || publish_die 1 "${MSG[1]}"
 
 			# File $input is Markdown.
 			if [[ "$input" == *.md ]]
@@ -165,19 +190,17 @@ publish_main() {
 					output="${output%.md}.html"
 				fi
 
-
 				# Pandoc metadata, overwritten each iteration.
 				unset PANDOCMETA
-				#PANDOCMETA+=(--metadata="lang:$LANG")
-				#PANDOCMETA+=(--metadata="title:$(basename -s .md "$input")")
+				#PANDOCMETA+=(--metadata="page-title:$(basename -s .md "$input")")
 
 				# Convert file to $output with pandoc, die on error.
-				pandoc "${PANDOC[@]}" "${PANDOCMETA[@]}" "$input" -o "$output" || publish_die 1 "pandoc exited with status > 0, check console"
+				pandoc "${PANDOC[@]}" "${PANDOCMETA[@]}" "$input" -o "$output" || publish_die 1 "${MSG[1]}"
 
 			# File $input is not Markdown.
 			else
 				# Copy $input to $output, die on error.
-				cp "$input" "$output" || publish_die 1 "cp exited with status > 0, check console"
+				cp "$input" "$output" || publish_die 1 "${MSG[1]}"
 			fi
 
 			publish_debug "$input -> $output"
@@ -190,7 +213,7 @@ publish_main() {
 
 }
 
-# -- Command Line Options:
+# -- Command Line Options
 while getopts ":dhi:op:v" OPT; do
 	case "${OPT}" in
 		d | v)
