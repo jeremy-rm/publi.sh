@@ -18,13 +18,14 @@ publi.sh [PUHB-lish] v3-2020.10.19.05
 # 2020.10.19.05 Created common strings array to replace repetative messages.
 
 # -- Pandoc Options (Safe)
-PANDOC+=(--css="/style.css")
 PANDOC+=(--number-sections)
 PANDOC+=(--quiet)
 PANDOC+=(--section-divs)
 PANDOC+=(--toc)
+PANDOC+=(--toc-depth=2)
 
 # -- Pandoc Options (Dangerous)
+PANDOC+=(--css="/style.css")
 PANDOC+=(--from="markdown+backtick_code_blocks+definition_lists+emoji+fancy_lists+fenced_code_attributes+line_blocks+markdown_in_html_blocks+yaml_metadata_block")
 PANDOC+=(--to="html5")
 PANDOC+=(--include-in-header="${HOME}/.publi.sh/include/in-header.html")
