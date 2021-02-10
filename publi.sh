@@ -73,7 +73,7 @@ publish_init() {
 		publish_debug "pandoc: $pandocopt"
 	done
 
-	# Sanity: Check that the ~/publi.sh directory exists, otherwise create it.
+	# Sanity: Check that the ~/.publi.sh directory exists, otherwise create it.
 	if ! [[ -r "${HOME}/.publi.sh" ]]
 	then
 		publish_debug "creating new script directory: ${HOME}/.publi.sh"
