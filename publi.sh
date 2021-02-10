@@ -28,7 +28,7 @@ declare -A MSG=(
 # -- Echo formatted exit status and additional args to console then exit with status.
 publish_die() {
 	echo -e "\n$0 error - exit $1: $2\n" >/dev/stderr
-	exit $1
+	exit "$1"
 }
 
 # -- publish_init <input directory> <output directory>
@@ -36,12 +36,12 @@ publish_die() {
 publish_init() {
 
 	# Option: Debug / Verbosity Mode
-	if ! [[ -z $DEBUG ]]
+	if [[ -n $DEBUG ]]
 	then
 		# Perform shameless attribution and create debug function.
 		echo -e "$PUBLISH"
 		publish_debug() {
-			if [[ ! -z $1 ]]
+			if [[ -n $1 ]]
 			then
 				echo "$0:" "$1"
 			else
@@ -58,13 +58,13 @@ publish_init() {
 	fi
 
 	# Option: Index File Renaming
-	if ! [[ -z $INDEX ]]
+	if [[ -n $INDEX ]]
 	then
 		publish_debug "index: $INDEX"
 	fi
 
 	# Option: Output Overwrite Acknowledgement
-	if ! [[ -z $OVERWRITE ]]
+	if [[ -n $OVERWRITE ]]
 	then
 		publish_debug "overwrite warning acknowledged"
 	fi
@@ -96,7 +96,7 @@ publish_init() {
 	fi
 
 	# Sanity: Check the the correct number of args are given.
-	if [[ -z $1 ]] || [[ -z $2 ]] || [[ ! -z $3 ]]
+	if [[ -z $1 ]] || [[ -z $2 ]] || [[ -n $3 ]]
 	then
 		publish_die 2 "invalid number of arguments, use $0 -h for help"
 	fi
@@ -114,7 +114,7 @@ publish_init() {
 	fi
 
 	# Safety: Check that destination directory is empty to prevent accidental overwrites.
-	if [[ "$(ls -A $2)" ]] && [[ -z $OVERWRITE ]]
+	if [[ "$(ls -A "$2")" ]] && [[ -z $OVERWRITE ]]
 	then
 		publish_die 2 "destination directory is not empty, use -o to enable overwrite"
 	fi
@@ -164,7 +164,7 @@ publish_main() {
 			if [[ "$input" == *.md ]]
 			then
 				# Check if $input matches the optional index file glob.
-				if [[ "$(basename "$input")" == $INDEX ]]
+				if [[ "$(basename "$input")" == "$INDEX" ]]
 				then
 					# Change $output filename and extension to index.html.
 					output="$(dirname "$output")/index.html"
