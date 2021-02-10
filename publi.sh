@@ -1,31 +1,12 @@
 #!/usr/bin/env bash
 
 PUBLISH='
-publi.sh [PUHB-lish] v3-2020.10.19.05
+publi.sh [PUHB-lish] v3-2021.02.10.00
 (n) 1.	A tool for publishing markdown on the web with pandoc.
 		By J. Mayer (jeremy@0x4A.org) -- Use at your own risk!
 '
 
-# -- Changelog
-# 2020.10.13.01 Modified the 'publish_main' loop to reflect the addition of 'shopt globstar'.
-# 2020.10.19.01 The 'publish_init' function will now create a '~/.publi.sh' directory if one does not exist.
-# 2020.10.19.02 The 'publish_init' function will now create default files when creating '~/.publi.sh'.
-# 2020.10.19.03 Created a proof-of-concept template for returning YAML values to stdout, for some possible future use.
-#		Where 'example-variable.template' contains only '$example-variable$'...
-#		And 'example-input.md' contains a YAML header containing 'example-variable: foo'...
-#		Then 'pandoc example-input.md --template=example-variable.template' will return the value of example-variable.
-# 2020.10.19.04 Restructured the pandoc options to separate the dangerous arguments from those which are safe to edit.
-# 2020.10.19.05 Created common strings array to replace repetative messages.
-
-# -- Pandoc Options (Safe)
-PANDOC+=(--number-sections)
-PANDOC+=(--quiet)
-PANDOC+=(--section-divs)
-PANDOC+=(--toc)
-PANDOC+=(--toc-depth=2)
-
-# -- Pandoc Options (Dangerous)
-PANDOC+=(--css="/style.css")
+# -- Required Pandoc Options
 PANDOC+=(--from="markdown+backtick_code_blocks+definition_lists+emoji+fancy_lists+fenced_code_attributes+line_blocks+markdown_in_html_blocks+yaml_metadata_block")
 PANDOC+=(--to="html5")
 PANDOC+=(--include-in-header="${HOME}/.publi.sh/include/in-header.html")
