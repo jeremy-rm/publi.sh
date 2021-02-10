@@ -6,6 +6,11 @@ publi.sh [PUHB-lish] v3-2021.02.10.00
 		By J. Mayer (jeremy@0x4A.org) -- Use at your own risk!
 '
 
+# -- Required Shell Options
+set -e
+set -o pipefail
+shopt -s globstar
+
 # -- Required Pandoc Options
 PANDOC+=(--from="markdown+backtick_code_blocks+definition_lists+emoji+fancy_lists+fenced_code_attributes+line_blocks+markdown_in_html_blocks+yaml_metadata_block")
 PANDOC+=(--to="html5")
@@ -18,9 +23,6 @@ PANDOC+=(--standalone)
 declare -A MSG=(
 	[1]="check above this line for more information"
 )
-
-# -- Shell Options
-shopt -s globstar
 
 # -- publish_die <exit status> <args>
 # -- Echo formatted exit status and additional args to console then exit with status.
