@@ -1,13 +1,11 @@
 # This is a basic workflow to help you get started with Actions
 
-name: CI
+name: Publi.sh
 
 # Controls when the action will run. 
 on:
   # Triggers the workflow on push or pull request events but only for the main branch
   push:
-    branches: [ main ]
-  pull_request:
     branches: [ main ]
 
   # Allows you to run this workflow manually from the Actions tab
@@ -25,13 +23,18 @@ jobs:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v2
 
-      # Runs a single command using the runners shell
-      - name: Run a one-line script
-        run: echo Hello, world!
-
       # Runs a set of commands using the runners shell
-      - name: Run a multi-line script
+      - name: Run publi.sh with parameters.
         run: |
-          echo Add other actions to build,
-          echo test, and deploy your project.
-          echo "$SHELL"
+          ./publi.sh \
+          -o \
+          -i README.md \
+          -p "--css=https://cdn.jsdelivr.net/npm/@exampledev/new.css@1/new.min.css" \
+          -p "--number-sections" \
+          -p "--quiet" \
+          -p "--section-divs" \
+          -p "--toc" \
+          -p "--toc-depth=2" \
+          -v \
+          . \
+          ./public
