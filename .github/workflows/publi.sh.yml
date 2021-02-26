@@ -17,12 +17,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - name: 1 - Workspace Preflight
+      - name: preflight
         run: |
-          sudo apt-get update
           sudo apt-get install pandoc
           mkdir ./public
-      - name: 2 - Run Publi.sh
+      - name: Publi.sh
         run: |
           ./publi.sh \
           -o \
@@ -36,9 +35,8 @@ jobs:
           -v \
           . \
           ./public
-      - name: 3 - Deploy to Pages
+      - name: Deploy
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./public
-          destination_dir: ../
