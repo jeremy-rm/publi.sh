@@ -20,7 +20,7 @@ jobs:
       - name: Preflight
         run: |
           sudo apt-get install pandoc
-          mkdir ./public
+          mkdir ./build
       - name: Publi.sh
         run: |
           ./publi.sh \
@@ -34,12 +34,11 @@ jobs:
           -p "--toc-depth=2" \
           -v \
           . \
-          ./public
-      - name: Deploy to GitHub Pages
-        if: success()
-        uses: crazy-max/ghaction-github-pages@v2
+          ./build
+      - name: Deploy
+        uses: JamesIves/github-pages-deploy-action@4.0.0
         with:
-          target_branch: gh-pages
-          build_dir: public
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          branch: gh-pages
+          folder: build
+          single-commit: true
+          target-folder: /
