@@ -40,3 +40,4 @@ jobs:
         with:
           branch: main
           folder: build
+          target-folder: /
