@@ -13,23 +13,16 @@ on:
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  # This workflow contains a single job called "build"
-  Publi.sh:
-    # The type of runner that the job will run on
+  publish:
     runs-on: ubuntu-latest
-
-    # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v2
-
-      - name: Workspace Preflight
+      - name: 1 - Workspace Preflight
         run: |
           sudo apt-get update
           sudo apt-get install pandoc
           mkdir ./public
-
-      - name: Run Publi.sh
+      - name: 2 - Run Publi.sh
         run: |
           ./publi.sh \
           -o \
@@ -43,8 +36,7 @@ jobs:
           -v \
           . \
           ./public
-
-      - name: Deploy to Pages
+      - name: 3 - Deploy to Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
