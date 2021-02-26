@@ -5,6 +5,7 @@ Publi.sh is a wrapper for the pandoc universal document converter, written in ba
 `./publi.sh [options] <input directory> <output directory>`
 
 ## Options
+
 | Flag        | Description                           |
 | ----------- | ------------------------------------- |
 | `-d`, `-v`  | display verbose debugging output      |
