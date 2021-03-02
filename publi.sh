@@ -154,6 +154,7 @@ publish_main() {
 				#PANDOCMETA+=(--metadata="page-title:$(basename -s .md "$input")")
 
 				# Convert file to $output with pandoc, die on error.
+				publish_debug "pandoc ${PANDOC[@]} ${PANDOCMETA[@]} $input -o $output"
 				pandoc "${PANDOC[@]}" "${PANDOCMETA[@]}" "$input" -o "$output" || publish_die 1 "${MSG[1]}"
 
 			# File $input is not Markdown.
