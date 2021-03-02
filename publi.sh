@@ -17,10 +17,10 @@ PANDOC+=(--to="html5")
 PANDOC+=(--standalone)
 
 # -- Optional Pandoc Files
-[ -f "$1/.publi.sh/include/in-header.html" ] && PANDOC+=(--include-in-header="$1/.publi.sh/include/in-header.html")
-[ -f "$1/.publi.sh/include/before-body.html" ] && PANDOC+=(--include-before-body="$1/.publi.sh/include/before-body.html")
-[ -f "$1/.publi.sh/include/after-body.html" ] && PANDOC+=(--include-after-body="$1/.publi.sh/include/after-body.html")
-[ -f "$1/.publi.sh/template/publi.sh.html5" ] && PANDOC+=(--template="$1/.publi.sh/template/publi.sh.html5")
+[[ -f "$1"/.publi.sh/include/in-header.html ]] && PANDOC+=(--include-in-header="$1/.publi.sh/include/in-header.html")
+[[ -f "$1"/.publi.sh/include/before-body.html ]] && PANDOC+=(--include-before-body="$1/.publi.sh/include/before-body.html")
+[[ -f "$1"/.publi.sh/include/after-body.html ]] && PANDOC+=(--include-after-body="$1/.publi.sh/include/after-body.html")
+[[ -f "$1"/.publi.sh/template/publi.sh.html5 ]] && PANDOC+=(--template="$1/.publi.sh/template/publi.sh.html5")
 
 # -- Common Message Array
 declare -A MSG=(
