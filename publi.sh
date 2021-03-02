@@ -14,16 +14,12 @@ shopt -s globstar
 # -- Required Pandoc Options
 PANDOC+=(--from="markdown+backtick_code_blocks+definition_lists+emoji+fancy_lists+fenced_code_attributes+line_blocks+markdown_in_html_blocks+yaml_metadata_block")
 PANDOC+=(--to="html5")
-#PANDOC+=(--include-in-header="${HOME}/.publi.sh/include/in-header.html")
-#PANDOC+=(--include-before-body="${HOME}/.publi.sh/include/before-body.html")
-#PANDOC+=(--include-after-body="${HOME}/.publi.sh/include/after-body.html")
 PANDOC+=(--standalone)
 
-# -- Optional Pandoc Includes
-[ -f "./.publi.sh/include/in-header.html" ] && PANDOC+=(--include-in-header="./.publi.sh/include/in-header.html")
-[ -f "./.publi.sh/include/before-body.html" ] && PANDOC+=(--include-before-body="./.publi.sh/include/before-body.html")
-[ -f "./.publi.sh/include/after-body.html" ] && PANDOC+=(--include-after-body="./.publi.sh/include/after-body.html")
-
+# -- Optional Pandoc HTML Includes
+[ -f "$1/.publi.sh/include/in-header.html" ] && PANDOC+=(--include-in-header="$1/.publi.sh/include/in-header.html")
+[ -f "$1/.publi.sh/include/before-body.html" ] && PANDOC+=(--include-before-body="$1/.publi.sh/include/before-body.html")
+[ -f "$1/.publi.sh/include/after-body.html" ] && PANDOC+=(--include-after-body="$1/.publi.sh/include/after-body.html")
 
 # -- Common Message Array
 declare -A MSG=(
@@ -80,20 +76,6 @@ publish_init() {
 	do
 		publish_debug "pandoc: $pandocopt"
 	done
-
-#	# Sanity: Check that the ~/.publi.sh directory exists, otherwise create it.
-#	if ! [[ -r "${HOME}/.publi.sh" ]]
-#	then
-#		publish_debug "creating new script directory: ${HOME}/.publi.sh"
-#		# Create include directory and default files.
-#		mkdir -p "${HOME}/.publi.sh/include" || publish_die 1 "${MSG[1]}"
-#		touch "${HOME}/.publi.sh/include/after-body.html" || publish_die 1 "${MSG[1]}"
-#		touch "${HOME}/.publi.sh/include/before-body.html" || publish_die 1 "${MSG[1]}"
-#		touch "${HOME}/.publi.sh/include/in-header.html" || publish_die 1 "${MSG[1]}"
-#		# Create template directory and default files.
-#		mkdir -p "${HOME}/.publi.sh/templates" || publish_die 1 "${MSG[1]}"
-#		echo "\$example-variable\$" > "${HOME}/.publi.sh/templates/example-variable.template" || publish_die 1 "${MSG[1]}"
-#	fi
 
 	# Sanity: Check for pandoc.
 	if ! command -v pandoc &> /dev/null
