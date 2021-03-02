@@ -52,13 +52,14 @@ publish_init() {
 	fi
 
 	# Option: Pandoc Requirements & Optional Files
+	PANDOC+=(--data-dir="$1/.pandoc")
 	PANDOC+=(--from="markdown+backtick_code_blocks+definition_lists+emoji+fancy_lists+fenced_code_attributes+line_blocks+markdown_in_html_blocks+yaml_metadata_block")
-	PANDOC+=(--to="html5")
+	PANDOC+=(--to="html")
 	PANDOC+=(--standalone)
-	[[ -f "$1/.publi.sh/include/in-header.html" ]] && PANDOC+=(--include-in-header="$1/.publi.sh/include/in-header.html")
-	[[ -f "$1/.publi.sh/include/before-body.html" ]] && PANDOC+=(--include-before-body="$1/.publi.sh/include/before-body.html")
-	[[ -f "$1/.publi.sh/include/after-body.html" ]] && PANDOC+=(--include-after-body="$1/.publi.sh/include/after-body.html")
-	[[ -f "$1/.publi.sh/template/publi.sh.template" ]] && PANDOC+=(--template="$1/.publi.sh/template/publi.sh.template")
+	[[ -f "$1/.pandoc/include/in-header.html" ]] && PANDOC+=(--include-in-header="$1/.pandoc/include/in-header.html")
+	[[ -f "$1/.pandoc/include/before-body.html" ]] && PANDOC+=(--include-before-body="$1/.pandoc/include/before-body.html")
+	[[ -f "$1/.pandoc/include/after-body.html" ]] && PANDOC+=(--include-after-body="$1/.pandoc/include/after-body.html")
+	[[ -f "$1/.pandoc/templates/default.html" ]] && PANDOC+=(--template="$1/.pandoc/templates/default.html")
 	for pandocopt in "${PANDOC[@]}"
 	do
 		publish_debug "pandoc: $pandocopt"
