@@ -6,33 +6,6 @@ publi.sh [PUHB-lish] v3-2021.02.10.00
 		By J. Mayer (jeremy@0x4A.org) -- Use at your own risk!
 '
 
-# -- Required Shell Options
-set -e
-set -o pipefail
-shopt -s globstar
-
-# -- Required Pandoc Options
-PANDOC+=(--from="markdown+backtick_code_blocks+definition_lists+emoji+fancy_lists+fenced_code_attributes+line_blocks+markdown_in_html_blocks+yaml_metadata_block")
-PANDOC+=(--to="html5")
-PANDOC+=(--standalone)
-
-# -- Optional Pandoc Files
-[[ -f "$1/.publi.sh/include/in-header.html" ]] && PANDOC+=(--include-in-header="$1/.publi.sh/include/in-header.html")
-[[ -f "$1/.publi.sh/include/before-body.html" ]] && PANDOC+=(--include-before-body="$1/.publi.sh/include/before-body.html")
-[[ -f "$1/.publi.sh/include/after-body.html" ]] && PANDOC+=(--include-after-body="$1/.publi.sh/include/after-body.html")
-
-if [[ -f "$1/.publi.sh/template/publi.sh.html5" ]]
-then
-	PANDOC+=(--template="$1/.publi.sh/template/publi.sh.html5")
-else
-	echo "NOT FOUND: $1/.publi.sh/template/publi.sh.html5"
-fi
-
-# -- Common Message Array
-declare -A MSG=(
-	[1]="check above this line for more information"
-)
-
 # -- publish_die <exit status> <args>
 # -- Echo formatted exit status and additional args to console then exit with status.
 publish_die() {
@@ -78,7 +51,14 @@ publish_init() {
 		publish_debug "overwrite warning acknowledged"
 	fi
 
-	# Option: Additional Pandoc Options
+	# Option: Additional Pandoc Requirements & Options
+	PANDOC+=(--from="markdown+backtick_code_blocks+definition_lists+emoji+fancy_lists+fenced_code_attributes+line_blocks+markdown_in_html_blocks+yaml_metadata_block")
+	PANDOC+=(--to="html5")
+	PANDOC+=(--standalone)
+	[[ -f "$1/.publi.sh/include/in-header.html" ]] && PANDOC+=(--include-in-header="$1/.publi.sh/include/in-header.html")
+	[[ -f "$1/.publi.sh/include/before-body.html" ]] && PANDOC+=(--include-before-body="$1/.publi.sh/include/before-body.html")
+	[[ -f "$1/.publi.sh/include/after-body.html" ]] && PANDOC+=(--include-after-body="$1/.publi.sh/include/after-body.html")
+	[[ -f "$1/.publi.sh/template/publi.sh.html5" ]] && PANDOC+=(--template="$1/.publi.sh/template/publi.sh.html5")
 	for pandocopt in "${PANDOC[@]}"
 	do
 		publish_debug "pandoc: $pandocopt"
@@ -191,6 +171,16 @@ publish_main() {
 	return 0
 
 }
+
+# -- Required Shell Options
+set -e
+set -o pipefail
+shopt -s globstar
+
+# -- Common Message Array
+declare -A MSG=(
+	[1]="check above this line for more information"
+)
 
 # -- Command Line Options
 while getopts ":dhi:op:v" OPT; do
