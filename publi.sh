@@ -51,14 +51,14 @@ publish_init() {
 		publish_debug "overwrite warning acknowledged"
 	fi
 
-	# Option: Additional Pandoc Requirements & Options
+	# Option: Pandoc Requirements & Optional Files
 	PANDOC+=(--from="markdown+backtick_code_blocks+definition_lists+emoji+fancy_lists+fenced_code_attributes+line_blocks+markdown_in_html_blocks+yaml_metadata_block")
 	PANDOC+=(--to="html5")
 	PANDOC+=(--standalone)
 	[[ -f "$1/.publi.sh/include/in-header.html" ]] && PANDOC+=(--include-in-header="$1/.publi.sh/include/in-header.html")
 	[[ -f "$1/.publi.sh/include/before-body.html" ]] && PANDOC+=(--include-before-body="$1/.publi.sh/include/before-body.html")
 	[[ -f "$1/.publi.sh/include/after-body.html" ]] && PANDOC+=(--include-after-body="$1/.publi.sh/include/after-body.html")
-	#[[ -f "$1/.publi.sh/template/publi.sh.html5" ]] && PANDOC+=(--template="$1/.publi.sh/template/publi.sh.html5")
+	[[ -f "$1/.publi.sh/template/publi.sh.template" ]] && PANDOC+=(--template="$1/.publi.sh/template/publi.sh.template")
 	for pandocopt in "${PANDOC[@]}"
 	do
 		publish_debug "pandoc: $pandocopt"
