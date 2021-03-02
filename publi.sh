@@ -184,7 +184,7 @@ declare -A MSG=(
 )
 
 # -- Command Line Options
-while getopts ":dhi:op:v" OPT; do
+while getopts ":Ddhi:op:Vv" OPT; do
 	case "${OPT}" in
 		D | V)
 			set -vx
