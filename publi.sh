@@ -186,6 +186,10 @@ declare -A MSG=(
 # -- Command Line Options
 while getopts ":dhi:op:v" OPT; do
 	case "${OPT}" in
+		D | V)
+			set -vx
+			DEBUG=1
+			;;
 		d | v)
 			DEBUG=1
 			;;
