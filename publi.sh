@@ -175,7 +175,6 @@ while getopts ":Ddhi:op:Vv" OPT; do
 	case "${OPT}" in
 		D | V)
 			set -vx
-			DEBUG=1
 			;;
 		d | v)
 			DEBUG=1
