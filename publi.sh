@@ -63,29 +63,16 @@ publish_init() {
 		publish_die 2 "pandoc was not found in PATH"
 	fi
 
-	# Sanity: Check the the correct number of args are given.
+	# Sanity: Check that the correct number of args are given.
 	if [[ -z $1 ]] || [[ -z $2 ]] || [[ -n $3 ]]
 	then
 		publish_die 2 "invalid number of arguments, use $0 -h for help"
 	fi
 
-	# Sanity: Check that destination directory exists, or create it.
-#	if ! [[ -d "$2" ]]
-#	then
-#		mkdir -p "$2" || publish_die 2 "cannot create destination directory: $2"
-#		publish_debug "destination directory created: $2"
-#	fi
-
-	# Sanity: Check that destination directory exists and is writable.
-#	if ! [[ -w "$2" ]]
-#	then
-#		publish_die 2 "destination directory is not writable or does not exist: $2"
-#	fi
-
 	# Sanity: Check that source directory exists and is readable.
 	if ! [[ -r "$1" ]]
 	then
-		publish_die 2 "source directory is not readable or does not exist: $1"
+		publish_die 2 "source directory does not exist or is not readable: $1"
 	fi
 
 	# Safety: Check that destination directory is empty to prevent accidental overwrites.
