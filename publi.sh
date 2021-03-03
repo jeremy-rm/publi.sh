@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 
 PUBLISH='
-publi.sh [PUHB-lish] v3-2021.02.10.00
+publi.sh [PUHB-lish]
 (n) 1.	A tool for publishing markdown on the web with pandoc.
-		By J. Mayer (jeremy@0x4A.org) -- Use at your own risk!
+		By J. Mayer (jeremy@sbcn.me) -- Use at your own risk!
 '
 
 # -- publish_die <exit status> <args>
