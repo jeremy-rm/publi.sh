@@ -75,6 +75,12 @@ publish_init() {
 		publish_die 2 "source directory is not readable or does not exist: $1"
 	fi
 
+	# Sanity: Check that destination directory exists, or create it.
+	if ! [[ -d "$2" ]]
+	then
+		mkdir -p "$2" || publish_die 2 "cannot create destination directory: $2"
+	fi
+
 	# Sanity: Check that destination directory exists and is writable.
 	if ! [[ -w "$2" ]]
 	then
