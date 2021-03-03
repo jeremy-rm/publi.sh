@@ -87,16 +87,18 @@ publish_init() {
 
 # -- publish_help
 # -- Echo script usage and options to console.
+
 publish_help() {
 
 	echo
 	echo "Usage: ./publi.sh [options] <input directory> <output directory>"
 	echo
 	echo "	Options:"
-	echo "	-d, -v			display verbose debugging output"
+	echo "	-D, -V			display bash verbose and xtrace output"
+	echo "	-d, -v			display publi.sh debugging output"
 	echo "	-h			display help"
-	echo "	-i <file>		specify file to become index.html"
-	echo "	-o			confirm overwrite of output directory"
+	echo "	-i <glob pattern>	rename files matching pattern to index.html"
+	echo "	-o			confirm overwrite of non-empty output directory"
 	echo "	-p <arguments>		pass optional arguments to pandoc"
 	echo
 
