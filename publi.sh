@@ -163,19 +163,23 @@ publish_main() {
 
 }
 
+# -- publish_tree <input directory> <output directory>
+# -- Use the tree utility to generate an HTML directory tree.
 publish_tree() {
 
+	# Option: Tree
 	if [[ -n $TREE ]]
 	then
-	
 
-
+		# Check if tree is installed anywhere in our path.
 		if command -v tree &> /dev/null
 		then
+			# Create the directory to where tree output should go and run tree.
 			mkdir -p "$(dirname $TREE)" || publish_die 1 "${MSG[1]}"
 			tree -H "$2" > "$TREE"
 			publish_debug "tree: $2 -> $TREE"
 		else
+			# Tree was supposed to run, but it wasn't found.
 			publish_debug "tree binary was not found!"
 		fi
 
