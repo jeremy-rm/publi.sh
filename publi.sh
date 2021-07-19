@@ -176,7 +176,7 @@ publish_tree() {
 		then
 			# Create the directory to where tree output should go and run tree.
 			mkdir -p "$(dirname $TREE)" || publish_die 1 "${MSG[1]}"
-			tree -h -H / "$2" > "$TREE"
+			tree -C -H "" "$2" > "$TREE"
 			publish_debug "tree: $2 -> $TREE"
 		else
 			# Tree was supposed to run, but it wasn't found.
