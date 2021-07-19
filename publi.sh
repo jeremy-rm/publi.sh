@@ -100,6 +100,7 @@ publish_help() {
 	echo "	-i <glob pattern>	rename files matching pattern to index.html"
 	echo "	-o			confirm overwrite of non-empty output directory"
 	echo "	-p <arguments>		pass optional arguments to pandoc"
+	echo "	-t			generate tree output (requires tree)"
 	echo
 
 	return 0
@@ -162,6 +163,18 @@ publish_main() {
 
 }
 
+publish_tree()
+	if [[ -n $TREE ]]
+	then
+		if [[ -v tree ]]
+		then
+			tree -H "$2" > "$TREE"
+		else
+			publish_debug "tree binary not found"
+		fi
+	fi
+}
+
 # -- Required Shell Options
 set -e
 set -o pipefail
@@ -173,7 +186,7 @@ declare -A MSG=(
 )
 
 # -- Command Line Options
-while getopts ":Ddhi:op:Vv" OPT; do
+while getopts ":Ddhi:op:Vvt:" OPT; do
 	case "${OPT}" in
 		D | V)
 			set -vx
@@ -195,6 +208,9 @@ while getopts ":Ddhi:op:Vv" OPT; do
 		p)
 			PANDOC+=("${OPTARG}")
 			;;
+		t)
+			TREE="${OPTARG}"
+			;;
 		\?)
 			echo
 			echo "Invalid Option: ${OPTARG}"
@@ -209,6 +225,7 @@ shift $((OPTIND-1))
 # -- Engage!
 publish_init "$1" "$2"
 publish_main "$1" "$2"
+publish_tree "$1" "$2"
 
 echo
 exit 0
