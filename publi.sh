@@ -167,13 +167,15 @@ publish_tree() {
 
 	if [[ -n $TREE ]]
 	then
+	
 
-		if [[ -v tree ]]
+
+		if command -v tree &> /dev/null
 		then
 			mkdir -p "$(dirname $TREE)" || publish_die 1 "${MSG[1]}"
 			tree -H "$2" > "$TREE"
 		else
-			publish_debug "tree binary not found"
+			publish_debug "tree binary was not found!"
 		fi
 
 	fi
