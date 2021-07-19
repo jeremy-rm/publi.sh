@@ -168,6 +168,7 @@ publish_tree()
 	then
 		if [[ -v tree ]]
 		then
+			mkdir -p "$(dirname $TREE)"
 			tree -H "$2" > "$TREE"
 		else
 			publish_debug "tree binary not found"
