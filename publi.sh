@@ -163,9 +163,11 @@ publish_main() {
 
 }
 
-publish_tree()
+publish_tree() {
+
 	if [[ -n $TREE ]]
 	then
+
 		if [[ -v tree ]]
 		then
 			mkdir -p "$(dirname $TREE)"
@@ -173,7 +175,9 @@ publish_tree()
 		else
 			publish_debug "tree binary not found"
 		fi
+
 	fi
+
 }
 
 # -- Required Shell Options
