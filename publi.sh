@@ -174,6 +174,7 @@ publish_tree() {
 		then
 			mkdir -p "$(dirname $TREE)" || publish_die 1 "${MSG[1]}"
 			tree -H "$2" > "$TREE"
+			publish_debug "tree: $2 -> $TREE"
 		else
 			publish_debug "tree binary was not found!"
 		fi
